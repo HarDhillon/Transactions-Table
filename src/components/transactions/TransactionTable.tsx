@@ -9,6 +9,7 @@ import {
 import { TransactionResponse } from "@/services/types"
 import { getTransactions } from "../../services/api"
 import { useState, useEffect } from "react"
+import { TransactionTableSkeleton } from "./TransactionTableSkeleton"
 
 export const TransactionTable = () => {
     const [fetchedData, setFetchedData] = useState<TransactionResponse | null>(null)
@@ -29,10 +30,14 @@ export const TransactionTable = () => {
     }, []) 
 
     if (!fetchedData) {
-        return <div>Loading...</div>
+        return <TransactionTableSkeleton></TransactionTableSkeleton>
     }
     if (error) {
         return <div className="text-red-500">{error}</div>; 
+    }
+    // In case our API returns empty
+    if (fetchedData && fetchedData.transactions.length === 0) {
+        return <div className="text-center py-5">No transactions found.</div>;
     }
 
     const renderedData = fetchedData.transactions.map((transaction) => {
