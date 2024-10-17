@@ -41,9 +41,19 @@ export const TransactionTable = () => {
     }
 
     const renderedData = fetchedData.transactions.map((transaction) => {
+        const date = new Date(transaction.date);
+
+        const year = date.getUTCFullYear();
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const hours = String(date.getUTCHours()).padStart(2, '0');
+        const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+
+        const normalTime = `${hours}:${minutes} - ${day}/${month}/${year} `;
+
         return <TableRow key={transaction.id}>
             <TableCell className="border">{ transaction.id }</TableCell>
-            <TableCell className="border">{ transaction.date }</TableCell>
+            <TableCell className="border">{ normalTime }</TableCell>
             <TableCell className="border">£{ transaction.amount }</TableCell>
             <TableCell className="border">{ transaction.merchant }</TableCell>
             <TableCell className="border">{ transaction.category }</TableCell>
