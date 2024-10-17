@@ -12,6 +12,7 @@ import { useState, useEffect } from "react"
 
 export const TransactionTable = () => {
     const [fetchedData, setFetchedData] = useState<TransactionResponse | null>(null)
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchTransactions = async () => {
@@ -20,7 +21,7 @@ export const TransactionTable = () => {
                 const data = await getTransactions(1) 
                 setFetchedData(data)
             } catch (error) {
-                console.error('Error fetching transactions:', error)
+                setError('Failed to load transactions.');
             }
         }
 
@@ -29,6 +30,9 @@ export const TransactionTable = () => {
 
     if (!fetchedData) {
         return <div>Loading...</div>
+    }
+    if (error) {
+        return <div className="text-red-500">{error}</div>; 
     }
 
     const renderedData = fetchedData.transactions.map((transaction) => {
